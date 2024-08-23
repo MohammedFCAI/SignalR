@@ -1,0 +1,74 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title></title>
+    <script src="Scripts/jquery-1.6.4.js"></script>
+    <script src="Scripts/jquery.signalR-2.4.3.min.js"></script>
+        
+    <!---Load Proxy File-->
+    <script src="/signalr/hubs"></script>
+    <script>
+        $(function () {
+
+            name = prompt("Enter Your Name");
+
+            // Limit Hub
+            prox = $.connection.chat;
+
+            // Start Connection
+            $.connection.hub.start();
+
+            // Subscribe Callback method new message
+            prox.client.newMessage = function (n, m) {
+                $("ul").append("<li>"+n+": "+m+"</li>")
+            }
+        })
+
+        function send() {
+            prox.server.sendMessage(name, $("#txt").val());
+        }
+
+
+    </script>
+
+
+    <!--<script>
+        $(function () {
+            name = prompt("Enter your name: ");
+            // Define connection
+            var con = $.hubConnection();
+
+            // Create Proxy
+            prox = con.createHubProxy("chat");
+
+            // Start Connection
+            con.start();
+
+            // Define Subscribe Method  newMessage
+            prox.on("newMessage", function (name, message) {
+                $("ul").append("<li>"+name+": "+message+"</li>");
+            })
+        })
+
+        // Calling Server Method sendMessage
+        function send() {
+            prox.Invoke("sendMessage", name, $("#txt").val())
+        }
+
+    </script>-->
+
+
+
+</head>
+<body>
+    <input type="text" id="txt" placeholder="Type a message"/>
+    <input type="button" value="Send" onclick="send()"/>
+
+
+    <ul>
+        
+    </ul>
+    
+</body>
+</html>
